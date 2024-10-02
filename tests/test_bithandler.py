@@ -2,13 +2,17 @@ from modbuspy import bithandler
 import bitarray
 
 
-bits= [ True, True, False, False, False, True, False, True]
+bits=[1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1]
 
 def test_packbit():
-    test = bithandler.bools_to_int(bits)
-    assert test == b"\xc5"
+    a= bitarray.bitarray( bits)
+    test = bithandler.bools_to_bytes(bits)
+    assert test == a.tobytes()
     pass
 
-def test_bitsarray():
+def test_unpackbit():
+    ""
     a= bitarray.bitarray( bits)
-    assert a
+    # a.frombytes(b"\x01")
+    res = bithandler.bytes_to_bool(a.tobytes())
+    assert res == bits
