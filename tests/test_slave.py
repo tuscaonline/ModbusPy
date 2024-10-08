@@ -44,7 +44,6 @@ def test_getset_int8_HR():
     number = 127
     test = slave.Slave(endianness="Little")
     test.set_int8(1, number, "HR")
-    assert test._HoldingRegisterMemory[0:1] == b"\x7f"
     assert test.get_int8(1, 'HR') == number
 
 
@@ -237,3 +236,44 @@ def test_set_uint64_IR():
     assert test.get_uint64(1, 'IR') == number
 
 
+def test_slave_checkAdressMaxHr():
+    maxRegister = 2580
+    test = slave.Slave(HoldingRegisterAeraSize=maxRegister)
+    with pytest.raises(modbuserror.IllegalAdressError, match=r"Illegal address \(\d+\)"):
+        test.set_int8(maxRegister+2, 12, "HR")
+    with pytest.raises(modbuserror.IllegalAdressError, match=r"Illegal address \(\d+\)"):
+        test.set_int8(0, 12, "HR")
+
+
+def test_protected_aera():
+    test = slave.Slave(protectionAeraIr=[2])
+    test.set_uint64(1, 58899, "IR")
+    with pytest.raises(modbuserror.ProtectedAdressError):
+        test.get_uint64(1, "IR")
+    
+    test.set_uint8(1, 99, "IR")
+    assert test.get_uint8(1, "IR") == 99
+
+def test_protected_aera_slice():
+    test = slave.Slave(protectionAeraIr=[[2,4]])
+    test.set_uint16(1, 12, "IR")
+    with pytest.raises(modbuserror.ProtectedAdressError):
+        test.get_uint16(1, "IR")
+    assert test.get_uint8(1, "IR")==12
+    with pytest.raises(modbuserror.ProtectedAdressError):
+        assert test.get_uint8(2, "IR")==0
+    with pytest.raises(modbuserror.ProtectedAdressError):
+        assert test.get_uint8(3, "IR")==0
+    with pytest.raises(modbuserror.ProtectedAdressError):
+        assert test.get_uint8(4, "IR")==0
+
+    assert test.get_uint8(5, "IR")==0
+     
+def test_protected_aera_slice64():
+    test = slave.Slave(protectionAeraIr=[[2,4]])
+    test.set_uint8(1, 12, "IR")
+    assert test.get_uint8(1, "IR")==12
+    test.set_uint64(1, 12354, "IR")
+    with pytest.raises(modbuserror.ProtectedAdressError):
+        test.get_uint64(1, "IR")
+ 

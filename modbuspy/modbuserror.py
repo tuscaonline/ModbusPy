@@ -13,3 +13,7 @@ class IllegalNumberError(ModbusError):
 
 class IllegalAdressError(ModbusError):
     """Erreur de conversion de type"""
+
+
+class ProtectedAdressError(ModbusError):
+    """Erreur de conversion de type"""

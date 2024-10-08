@@ -23,5 +23,4 @@ def test_register_good_datatype():
     trame = modbustype.TrameRegister(3,1 , 4,b'\x01\x02\x03\x04')
     assert trame.trame == b'\x01\x02\x03\x04'
     assert isinstance(trame.trame, bytearray)
-
-    pass
+    
