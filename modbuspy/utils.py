@@ -1,10 +1,6 @@
-from functools import reduce
 from itertools import batched
 import struct
-
-def f(a, b):
-    return (a << 1) | b
-
+ 
 def bools_to_bytes(arr:list[bool])->bytes:
     ret = b""
     for i in batched(reversed(arr), 8):
