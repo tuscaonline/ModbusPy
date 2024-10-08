@@ -3,6 +3,8 @@ from struct import *
 from .utils import bytes_to_bools
 from .modbuserror import IllegalNumberError, IllegalAdressError
 
+from modbuspy import bithandler
+from typing import overload
 
 class Slave:
     """L'idée est de représenter l'état interne de l'esclave Modbus
