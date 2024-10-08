@@ -7,3 +7,9 @@ class ModbusParameterError(ModbusError):
 
 class ModbusLenghtError(ModbusError):
     """Erreur Modbus Parametre Erroné"""
+
+class IllegalNumberError(ModbusError):
+    """Erreur de conversion de type"""
+
+class IllegalAdressError(ModbusError):
+    """Erreur de conversion de type"""
